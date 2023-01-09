@@ -36,6 +36,7 @@ function Chat({
       setCurrentMessage("");
     }
   };
+  // load data when socket changed
   useEffect(() => {
     socket.on("load_messages", (data: []) => {
       data.map((eachData: messageContentProp) => {
