@@ -45,6 +45,7 @@ function Chat({
     });
   }, [socket]);
 
+  // receive all messages from server
   useEffect(() => {
     const receiveMessageHandler = (data: messageContentProp) => {
       setMessageList((list) => [...list, data]);
