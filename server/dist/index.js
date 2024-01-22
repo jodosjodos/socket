@@ -46,9 +46,6 @@ userSpace.on("connection", (socket) => {
         message.save().then(() => {
             socket.to(data.room).emit("receive_message", message);
         });
-        callback({
-            status: "ok",
-        });
     });
     // when user disconnected
     socket.on("disconnect", () => {

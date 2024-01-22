@@ -32,7 +32,7 @@ const io = new Server(httpServer, {
 });
 
 const userSpace = io.of("/users");
-userSpace.use((socket, next)=> {
+userSpace.use((socket, next) => {
   if (!socket) {
     console.log();
   }
@@ -54,9 +54,6 @@ userSpace.on("connection", (socket) => {
     const message = new Message(data);
     message.save().then(() => {
       socket.to(data.room).emit("receive_message", message);
-    });
-    callback({
-      status: "ok",
     });
   });
 
