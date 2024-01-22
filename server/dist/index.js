@@ -25,19 +25,29 @@ const io = new Server(httpServer, {
         methods: ["GET", "POST", "PATCH", "DELETE"],
     },
 });
-io.on("connection", (socket) => {
+const userSpace = io.of("/users");
+userSpace.use((socket, next) => {
+    if (!socket) {
+        console.log();
+    }
+    next();
+});
+userSpace.on("connection", (socket) => {
     console.log("someone connected", socket.id);
     socket.on("join_room", (data) => {
         socket.join(data.room);
-        console.log(`user with this id :${socket.id} have join this :${data.username} room`);
+        console.log(`user with this id : ${socket.id} have join this : ${data.username} room`);
         Message.find().then((data) => {
             socket.emit("load_messages", data);
         });
     });
-    socket.on("send_message", async (data) => {
+    socket.on("send_message", async (data, callback) => {
         const message = new Message(data);
         message.save().then(() => {
             socket.to(data.room).emit("receive_message", message);
+        });
+        callback({
+            status: "ok",
         });
     });
     // when user disconnected

@@ -5,6 +5,7 @@ import { createServer } from "http";
 import cors from "cors";
 import mongoose from "mongoose";
 import { Message } from "./db/database.js";
+import { Socket } from "dgram";
 // config dotenv
 dotenv.config();
 
@@ -30,22 +31,32 @@ const io = new Server(httpServer, {
   },
 });
 
-io.on("connection", (socket) => {
+const userSpace = io.of("/users");
+userSpace.use((socket, next)=> {
+  if (!socket) {
+    console.log();
+  }
+  next();
+});
+userSpace.on("connection", (socket) => {
   console.log("someone connected", socket.id);
   socket.on("join_room", (data) => {
     socket.join(data.room);
     console.log(
-      `user with this id :${socket.id} have join this :${data.username} room`
+      `user with this id : ${socket.id} have join this : ${data.username} room`
     );
     Message.find().then((data) => {
       socket.emit("load_messages", data);
     });
   });
 
-  socket.on("send_message", async (data) => {
+  socket.on("send_message", async (data, callback) => {
     const message = new Message(data);
     message.save().then(() => {
       socket.to(data.room).emit("receive_message", message);
+    });
+    callback({
+      status: "ok",
     });
   });
 

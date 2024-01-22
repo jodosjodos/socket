@@ -60,7 +60,7 @@ function Chat({
   return (
     <div className="chat-window">
       <div className="chat-header">
-        <p>Live Chat</p>
+        <p>Live Chat room : {room}</p>
       </div>
       <div className="chat-body">
         <ScrollToBottom className="message-container">
