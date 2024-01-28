@@ -20,6 +20,7 @@ function App() {
   };
   return (
     <div className="App">
+      {/* toggle Chat */}
       {!showChat ? (
         <div className="joinChatContainer">
           <h3>Join A Chat</h3>
