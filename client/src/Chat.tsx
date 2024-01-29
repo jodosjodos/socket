@@ -66,6 +66,7 @@ function Chat({
       </div>
       <div className="chat-body">
         <ScrollToBottom className="message-container">
+        {/* map over all messages */}
           {messageList.map((message: messageContentProp, key) => {
             return (
               <div
